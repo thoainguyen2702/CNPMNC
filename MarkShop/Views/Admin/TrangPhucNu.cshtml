@@ -1,0 +1,41 @@
+﻿@model PagedList.IPagedList<MarkShop.SanPham>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "TrangPhucNu";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+    <h3 class="text-center lead mb-4 font-weight-bold" style="font-size:36px; text-shadow: 0 0 8px rgba(0,0,0,0.2)" data-aos="flip-right">Combo Nhóm</h3>
+    @using (Html.BeginForm("timKiemSanPham", "ThemXoaSua"))
+    {
+        <div class="d-flex" data-aos="fade-left">
+            <div class="group">
+                <input class="txtTimKiem" type="text" name="tenSP" autocomplete="off" required>
+                <label class="timKiem">Tìm kiếm sản phẩm</label>
+            </div>
+            <button class="btnStyle btn1 ml-3" style="width:90px; height:40px; line-height:16px;">Tìm</button>
+        </div>
+    }
+    <div class="row">
+        @foreach (var tpn in Model)
+        {
+            if (tpn.GioiTinh == "Nữ")
+            {
+                <div class="col-md-3 mb-2" style="box-shadow: 0 0 8px rgba(0,0,0,0.2)">
+                    <a href="@Url.Action("ChiTietSanPham", "ThemXoaSua", new { @masp = tpn.MaSP })">
+                        <img src="@Url.Content("~/Images/" + tpn.Anh)" height="250" style="width:100%;" />
+                    </a>
+                    <p class="mt-2 mb-0" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden">@tpn.TenSP.ToLower()</p>
+                    <del style="font-size: 13px;" class="mr-2">200.000 VNĐ </del><span style="color: red">@tpn.GiaBan.Value.ToString("#,##0.###") VNĐ</span>
+                    
+                    <div class="text-right pb-3">
+                        <a href="@Url.Action("XoaSanPham", "ThemXoaSua", new { @maSP = tpn.MaSP })" class="btn btn-danger w-100">Xoá</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    @Html.PagedListPager(Model, page => Url.Action("TrangPhucNu", new { page }))
+</div>
